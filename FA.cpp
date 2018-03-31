@@ -133,7 +133,7 @@ void eNFA::printDot(std::ostream& stream, bool verbose)
 
 		for (std::set<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
 		{
-			output += "\"" + (*it_state)->name +"\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
+			output += "\"" + (*it_state)->name + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
 
 		output += "\n";
@@ -248,9 +248,9 @@ DFA eNFA::convertToDFA()
 	dfa.alphabet = alphabet;
 	dfa.states.insert(*std::find_if(dfastates.begin(), dfastates.end(), [&](const std::shared_ptr<DFAState>& p) { return p->starting; }));
 	dfa.startState = *dfa.states.begin();
-	
+
 	size_t size;
-	do 
+	do
 	{
 		size = dfa.states.size();
 
