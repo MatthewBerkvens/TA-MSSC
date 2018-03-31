@@ -38,12 +38,12 @@ void DFA::checkIfValid()
 
 void DFA::printDot(std::ostream& stream, bool verbose)
 {
-	std::string output = "digraph {\n\"start\" -> \"" + startState->name + "\"\n\n";
+	std::string output = "digraph {\n  \"start\" -> \"" + startState->name + "\"\n\n";
 
 	for (std::set<std::shared_ptr<DFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
 		if ((*it_state)->name == "" && !verbose) continue;
-		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
+		output += "  \"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
 
 		std::set<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
@@ -70,7 +70,7 @@ void DFA::printDot(std::ostream& stream, bool verbose)
 
 		for (std::set<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
 		{
-			output += "\"" + (*it_state)->name + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
+			output += "  \"" + (*it_state)->name + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
 
 		output += "\n";
@@ -101,12 +101,12 @@ void eNFA::checkIfValid()
 
 void eNFA::printDot(std::ostream& stream, bool verbose)
 {
-	std::string output = "digraph {\n\"start\" -> \"" + startState->name + "\"\n\n";
+	std::string output = "digraph {\n  \"start\" -> \"" + startState->name + "\"\n\n";
 
 	for (std::set<std::shared_ptr<NFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
 		if ((*it_state)->name == "" && !verbose) continue;
-		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
+		output += "  \"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
 
 		std::set<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
@@ -133,7 +133,7 @@ void eNFA::printDot(std::ostream& stream, bool verbose)
 
 		for (std::set<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
 		{
-			output += "\"" + (*it_state)->name + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
+			output += "  \"" + (*it_state)->name + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
 
 		output += "\n";

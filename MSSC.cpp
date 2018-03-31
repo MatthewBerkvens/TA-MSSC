@@ -6,15 +6,47 @@
 #include <set>
 #include <memory>
 #include <algorithm>
+#include <exception>
 
 #include "State.h"
 #include "FA.h"
 
-int main()
+int main(int argc, char* argv[])
 {
+	bool verbose = false;
+	std::string filename;
+	std::string outputname;
+
+	if (argc <= 2)
+	{
+		std::cout << "Usage: " << argv[0] << " (-v) <json input file> <dot output file>";
+		return 0;
+	}
+	else
+	{
+		if (strcmp(argv[1], "-v") == 0 && argc == 4)
+		{
+			verbose = true;
+			filename = argv[2];
+			outputname = argv[3];
+		}
+		else
+		{
+			filename = argv[1];
+			outputname = argv[2];
+		}
+	}
+
 	Json::Value root;
-	std::ifstream config_doc("C:\\Users\\Matthew\\source\\repos\\MSSC\\Debug\\eNFA.json", std::ifstream::binary);
-	config_doc >> root;
+
+	try {
+		std::ifstream config_doc(filename, std::ifstream::binary);
+		config_doc >> root;
+	}
+	catch (std::exception& e)
+	{
+		std::cout << e.what();
+	}
 
 	std::string type = root["type"].asString();
 
@@ -67,15 +99,13 @@ int main()
 	}
 
 	enfa.checkIfValid();
-	enfa.printDot(std::cout, false);
-	std::cout << "\n";
 
 	DFA d = enfa.convertToDFA();
 
 	d.checkIfValid();
-	d.printDot(std::cout, false);
-
-	std::cin.get();
+	std::ofstream outputfile;
+	outputfile.open(outputname);
+	d.printDot(outputfile, verbose);
 
 	return 0;
 }
