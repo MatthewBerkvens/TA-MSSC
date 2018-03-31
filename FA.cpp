@@ -42,11 +42,35 @@ void DFA::printDot(std::ostream& stream)
 
 	for (std::set<std::shared_ptr<DFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
-		output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
+		if ((*it_state)->name == "") continue;
+		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
+
+		std::vector<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
 		for (std::vector<std::pair<char, std::shared_ptr<DFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
-			output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\" -> \"" + (it_trans->second->name == "" ? "garbage" : it_trans->second->name) + "\" [label=\"" + it_trans->first + "\"]\n";
+			if (it_trans->second->name == "") continue;
+			std::string transname = it_trans->second->name;
+
+			std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
+
+			if (pair == labelset.end())
+			{
+				std::string str;
+				str.push_back(it_trans->first);
+				labelset.push_back(std::shared_ptr<std::pair<std::string, std::string>>(new std::pair<std::string, std::string>(transname, str)));
+			}
+			else
+			{
+				std::string str = ", ";
+				str.push_back(it_trans->first);
+				(*pair)->second += str;
+			}
+		}
+
+		for (std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
+		{
+			output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
 
 		output += "\n";
@@ -81,11 +105,35 @@ void eNFA::printDot(std::ostream& stream)
 
 	for (std::set<std::shared_ptr<NFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
-		output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
+		if ((*it_state)->name == "") continue;
+		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
+
+		std::vector<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
 		for (std::vector<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
-			output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\" -> \"" + (it_trans->second->name == "" ? "garbage" : it_trans->second->name) + "\" [label=\"" + it_trans->first + "\"]\n";
+			if (it_trans->second->name == "") continue;
+			std::string transname = it_trans->second->name;
+
+			std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
+
+			if (pair == labelset.end())
+			{
+				std::string str;
+				str.push_back(it_trans->first);
+				labelset.push_back(std::shared_ptr<std::pair<std::string, std::string>>(new std::pair<std::string, std::string>(transname, str)));
+			}
+			else
+			{
+				std::string str = ", ";
+				str.push_back(it_trans->first);
+				(*pair)->second += str;
+			}
+		}
+
+		for (std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
+		{
+			output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
 
 		output += "\n";
@@ -123,20 +171,16 @@ void eNFA::eclose(std::set<std::shared_ptr<NFAState>>& set, std::set<std::shared
 DFA eNFA::convertToDFA()
 {
 	checkIfValid();
-	DFA dfa;
-	dfa.alphabet = alphabet;
 
 	std::set<std::shared_ptr<NFAState>> startSet;
 
 	std::set<std::set<std::shared_ptr<NFAState>>> powerset;
 	eclose(startSet, startState);
 
-	std::set<std::set<std::shared_ptr<NFAState>>> eclosedpowerset;
-
-	stateSetToString(startSet);
-
 	powerset.insert(startSet);
 	powerset = generatePowerset<std::set<std::shared_ptr<NFAState>>>(states);
+
+	std::set<std::set<std::shared_ptr<NFAState>>> eclosedpowerset;
 
 	for (std::set<std::set<std::shared_ptr<NFAState>>>::iterator it_set = powerset.begin(); it_set != powerset.end(); it_set++)
 	{
@@ -145,6 +189,10 @@ DFA eNFA::convertToDFA()
 		eclose(newset, wtf);
 		eclosedpowerset.insert(newset);
 	}
+
+
+
+	std::set<std::shared_ptr<DFAState>> dfastates;
 
 	for (std::set<std::set<std::shared_ptr<NFAState>>> ::iterator it_set = eclosedpowerset.begin(); it_set != eclosedpowerset.end(); it_set++)
 	{
@@ -160,15 +208,13 @@ DFA eNFA::convertToDFA()
 
 		std::shared_ptr<DFAState> dfastate(new DFAState(statename, starting, accepting));
 
-		dfa.states.insert(dfastate);
-		if (starting)
-			dfa.startState = dfastate;
+		dfastates.insert(dfastate);
 	}
 
 	for (std::set<std::set<std::shared_ptr<NFAState>>> ::iterator it_set = eclosedpowerset.begin(); it_set != eclosedpowerset.end(); it_set++)
 	{
 		std::string statesname = stateSetToString(*it_set);
-		std::shared_ptr<DFAState> correspondingdfa = *std::find_if(dfa.states.begin(), dfa.states.end(), [&](const std::shared_ptr<DFAState>& p) { return p->name == statesname; });
+		std::shared_ptr<DFAState> correspondingdfa = *std::find_if(dfastates.begin(), dfastates.end(), [&](const std::shared_ptr<DFAState>& p) { return p->name == statesname; });
 
 		for (std::vector<char>::iterator it_alp = alphabet.begin(); it_alp != alphabet.end(); it_alp++)
 		{
@@ -194,11 +240,28 @@ DFA eNFA::convertToDFA()
 
 			std::string transitionsetname = stateSetToString(transitionset);
 
-			correspondingdfa->transitions.push_back(std::pair<char, std::shared_ptr<DFAState>>(*it_alp, *std::find_if(dfa.states.begin(), dfa.states.end(), [&](const std::shared_ptr<DFAState>& p) { return p->name == transitionsetname; })));
+			correspondingdfa->transitions.push_back(std::pair<char, std::shared_ptr<DFAState>>(*it_alp, *std::find_if(dfastates.begin(), dfastates.end(), [&](const std::shared_ptr<DFAState>& p) { return p->name == transitionsetname; })));
 		}
 	}
 
+	std::set<std::shared_ptr<DFAState>> reachable_states;
+
+	for (std::set<std::shared_ptr<DFAState>>::iterator it_state = dfastates.begin(); it_state != dfastates.end(); it_state++)
+	{
+		if ((*it_state)->starting)
+			reachable_states.insert(*it_state);
+		for (std::vector<char>::iterator it_alp = alphabet.begin(); it_alp != alphabet.end(); it_alp++)
+		{
+			reachable_states.insert((**it_state)(*it_alp));
+		}
+	}
+
+	DFA dfa;
+	dfa.alphabet = alphabet;
+	dfa.states = reachable_states;
+	dfa.startState = *std::find_if(reachable_states.begin(), reachable_states.end(), [&](const std::shared_ptr<DFAState>& p) { return p->starting; });
 	dfa.checkIfValid();
+
 	return dfa;
 }
 
