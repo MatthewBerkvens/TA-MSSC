@@ -1,15 +1,9 @@
 #include <assert.h>
-#include <iostream>
-#include <fstream>
-#include <tuple>
 #include <string>
 #include <set>
 #include <memory>
-#include <vector>
-#include <algorithm>
 
 #include "FA.h"
-#include "State.h"
 
 void DFA::checkIfValid()
 {
