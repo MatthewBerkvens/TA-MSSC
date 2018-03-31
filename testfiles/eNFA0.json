@@ -1,0 +1,293 @@
+{
+  "type": "eNFA",
+  "alphabet": [
+    "0",
+    "1",
+	"2",
+	"3",
+	"4",
+	"5",
+	"6",
+	"7",
+	"8",
+	"9",
+	"-",
+	"+",
+	"."
+  ],
+  "eps": "e",
+  "states": [
+    {
+      "name": "Q0",
+      "starting": true,
+      "accepting": false
+    },
+    {
+      "name": "Q1",
+      "starting": false,
+      "accepting": false
+    },
+    {
+      "name": "Q2",
+      "starting": false,
+      "accepting": false
+    },
+    {
+      "name": "Q3",
+      "starting": false,
+      "accepting": false
+    },
+    {
+      "name": "Q4",
+      "starting": false,
+      "accepting": false
+    },
+    {
+      "name": "Q5",
+      "starting": false,
+      "accepting": true
+    }
+  ],
+  "transitions": [
+    {
+      "from": "Q0",
+      "to": "Q1",
+      "input": "-"
+    },
+    {
+      "from": "Q0",
+      "to": "Q1",
+      "input": "+"
+    },
+    {
+      "from": "Q0",
+      "to": "Q1",
+      "input": "e"
+    },
+	
+	
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "0"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "1"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "2"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "3"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "4"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "5"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "6"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "7"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "8"
+    },
+    {
+      "from": "Q1",
+      "to": "Q1",
+      "input": "9"
+    },
+	
+    {
+      "from": "Q1",
+      "to": "Q2",
+      "input": "."
+    },
+	
+	{
+      "from": "Q1",
+      "to": "Q4",
+      "input": "0"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "1"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "2"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "3"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "4"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "5"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "6"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "7"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "8"
+    },
+    {
+      "from": "Q1",
+      "to": "Q4",
+      "input": "9"
+    },
+	
+	
+	{
+      "from": "Q2",
+      "to": "Q3",
+      "input": "0"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "1"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "2"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "3"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "4"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "5"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "6"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "7"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "8"
+    },
+    {
+      "from": "Q2",
+      "to": "Q3",
+      "input": "9"
+    },
+	
+	
+	{
+      "from": "Q3",
+      "to": "Q3",
+      "input": "0"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "1"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "2"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "3"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "4"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "5"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "6"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "7"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "8"
+    },
+    {
+      "from": "Q3",
+      "to": "Q3",
+      "input": "9"
+    },
+	
+	
+    {
+      "from": "Q4",
+      "to": "Q3",
+      "input": "."
+    },
+    {
+      "from": "Q3",
+      "to": "Q5",
+      "input": "e"
+    }
+  ]
+}

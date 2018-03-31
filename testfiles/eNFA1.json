@@ -1,0 +1,37 @@
+{
+  "type": "eNFA",
+  "alphabet": [
+    "0",
+    "1"
+  ],
+  "eps": "e",
+  "states": [
+    {
+      "name": "Q0",
+      "starting": true,
+      "accepting": false
+    },
+    {
+      "name": "Q1",
+      "starting": false,
+      "accepting": true
+    }
+  ],
+  "transitions": [
+    {
+      "from": "Q0",
+      "to": "Q0",
+      "input": "0"
+    },
+    {
+      "from": "Q0",
+      "to": "Q1",
+      "input": "e"
+    },
+    {
+      "from": "Q1",
+      "to": "Q0",
+      "input": "1"
+    }
+  ]
+}
