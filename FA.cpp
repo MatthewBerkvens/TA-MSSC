@@ -36,20 +36,20 @@ void DFA::checkIfValid()
 	assert(startingStatesCount == 1); //only 1 starting state allowed
 }
 
-void DFA::printDot(std::ostream& stream)
+void DFA::printDot(std::ostream& stream, bool verbose)
 {
 	std::string output = "digraph {\n\"start\" -> \"" + startState->name + "\"\n\n";
 
 	for (std::set<std::shared_ptr<DFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
-		if ((*it_state)->name == "") continue;
+		if ((*it_state)->name == "" && !verbose) continue;
 		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
 
 		std::vector<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
 		for (std::vector<std::pair<char, std::shared_ptr<DFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
-			if (it_trans->second->name == "") continue;
+			if (it_trans->second->name == "" && !verbose) continue;
 			std::string transname = it_trans->second->name;
 
 			std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
@@ -99,20 +99,20 @@ void eNFA::checkIfValid()
 	assert(startingStatesCount == 1); //only 1 starting state allowed
 }
 
-void eNFA::printDot(std::ostream& stream)
+void eNFA::printDot(std::ostream& stream, bool verbose)
 {
 	std::string output = "digraph {\n\"start\" -> \"" + startState->name + "\"\n\n";
 
 	for (std::set<std::shared_ptr<NFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
-		if ((*it_state)->name == "") continue;
+		if ((*it_state)->name == "" && !verbose) continue;
 		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
 
 		std::vector<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
 		for (std::vector<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
-			if (it_trans->second->name == "") continue;
+			if (it_trans->second->name == "" && !verbose) continue;
 			std::string transname = it_trans->second->name;
 
 			std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
@@ -133,7 +133,7 @@ void eNFA::printDot(std::ostream& stream)
 
 		for (std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
 		{
-			output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
+			output += "\"" + (*it_state)->name +"\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
 
 		output += "\n";

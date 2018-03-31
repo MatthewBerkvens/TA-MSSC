@@ -10,7 +10,7 @@ public:
 	std::vector<char> alphabet;
 
 	void checkIfValid();
-	void printDot(std::ostream& stream);
+	void printDot(std::ostream& stream, bool verbose);
 };
 
 class eNFA {
@@ -21,7 +21,7 @@ public:
 	char eps;
 
 	void checkIfValid();
-	void printDot(std::ostream& stream);
+	void printDot(std::ostream& stream, bool verbose);
 
 	void eclose(std::set<std::shared_ptr<NFAState>>& set, std::shared_ptr<NFAState> state);
 	void eclose(std::set<std::shared_ptr<NFAState>>& set, std::set<std::shared_ptr<NFAState>>& states);

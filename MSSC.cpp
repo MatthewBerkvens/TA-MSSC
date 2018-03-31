@@ -67,13 +67,13 @@ int main()
 	}
 
 	enfa.checkIfValid();
-	enfa.printDot(std::cout);
+	enfa.printDot(std::cout, true);
 	std::cout << "\n";
 
 	DFA d = enfa.convertToDFA();
 
 	d.checkIfValid();
-	d.printDot(std::cout);
+	d.printDot(std::cout, true);
 
 	std::cin.get();
 
