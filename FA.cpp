@@ -70,7 +70,7 @@ void DFA::printDot(std::ostream& stream, bool verbose)
 
 		for (std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
 		{
-			output += "\"" + ((*it_state)->name == "" ? "garbage" : (*it_state)->name) + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
+			output += "\"" + (*it_state)->name + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
 
 		output += "\n";
@@ -246,13 +246,16 @@ DFA eNFA::convertToDFA()
 
 	std::set<std::shared_ptr<DFAState>> reachable_states;
 
+	//NEED TO START FROM START STATE!
 	for (std::set<std::shared_ptr<DFAState>>::iterator it_state = dfastates.begin(); it_state != dfastates.end(); it_state++)
 	{
 		if ((*it_state)->starting)
 			reachable_states.insert(*it_state);
 		for (std::vector<char>::iterator it_alp = alphabet.begin(); it_alp != alphabet.end(); it_alp++)
 		{
-			reachable_states.insert((**it_state)(*it_alp));
+			std::shared_ptr<DFAState> ptr = (**it_state)(*it_alp);
+			if (ptr->name != (*it_state)->name)
+				reachable_states.insert(ptr);
 		}
 	}
 
