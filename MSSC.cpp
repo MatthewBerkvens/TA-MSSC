@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 	}
 	catch (std::exception& e)
 	{
-		std::cout << e.what();
+		(void)e; //remove unreferences local variable warning
 	}
 
 	std::string type = root["type"].asString();
