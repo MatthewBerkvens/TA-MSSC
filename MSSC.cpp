@@ -35,7 +35,7 @@ int main()
 	enfa.eps = jsonEps.asString()[0];
 	for (unsigned int i = 0; i < jsonAlphabet.size(); i++)
 	{
-		enfa.alphabet.push_back(jsonAlphabet[i].asString()[0]);
+		enfa.alphabet.insert(jsonAlphabet[i].asString()[0]);
 	}
 
 	for (unsigned int i = 0; i < jsonStates.size(); i++)
@@ -62,18 +62,18 @@ int main()
 						[&](const std::shared_ptr<NFAState> p) { return jsonTransitions[x]["to"].asString() == p->name; }
 			));
 
-			(*it_state)->transitions.push_back(newtransition);
+			(*it_state)->transitions.insert(newtransition);
 		}
 	}
 
 	enfa.checkIfValid();
-	enfa.printDot(std::cout, true);
+	enfa.printDot(std::cout, false);
 	std::cout << "\n";
 
 	DFA d = enfa.convertToDFA();
 
 	d.checkIfValid();
-	d.printDot(std::cout, true);
+	d.printDot(std::cout, false);
 
 	std::cin.get();
 

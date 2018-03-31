@@ -7,7 +7,7 @@ class DFA {
 public:
 	std::set<std::shared_ptr<DFAState>> states;
 	std::shared_ptr<DFAState> startState;
-	std::vector<char> alphabet;
+	std::set<char> alphabet;
 
 	void checkIfValid();
 	void printDot(std::ostream& stream, bool verbose);
@@ -17,7 +17,7 @@ class eNFA {
 public:
 	std::set<std::shared_ptr<NFAState>> states;
 	std::shared_ptr<NFAState> startState;
-	std::vector<char> alphabet;
+	std::set<char> alphabet;
 	char eps;
 
 	void checkIfValid();

@@ -19,7 +19,7 @@ void DFA::checkIfValid()
 	for (std::set<std::shared_ptr<DFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++) //loop over states
 	{
 		std::set<char> transChars;
-		for (std::vector<std::pair<char, std::shared_ptr<DFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++) //loop over transitions of current state
+		for (std::set<std::pair<char, std::shared_ptr<DFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++) //loop over transitions of current state
 		{
 			assert(std::find(alphabet.begin(), alphabet.end(), it_trans->first) != alphabet.end()); //check if alphabet contains input
 			assert(std::find_if(states.begin(), states.end(), [&](const std::shared_ptr<DFAState> p) { return p->name == it_trans->second->name; }) != states.end()); //check if states contains transitionstate
@@ -45,20 +45,20 @@ void DFA::printDot(std::ostream& stream, bool verbose)
 		if ((*it_state)->name == "" && !verbose) continue;
 		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
 
-		std::vector<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
+		std::set<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
-		for (std::vector<std::pair<char, std::shared_ptr<DFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
+		for (std::set<std::pair<char, std::shared_ptr<DFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
 			if (it_trans->second->name == "" && !verbose) continue;
 			std::string transname = it_trans->second->name;
 
-			std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
+			std::set<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
 
 			if (pair == labelset.end())
 			{
 				std::string str;
 				str.push_back(it_trans->first);
-				labelset.push_back(std::shared_ptr<std::pair<std::string, std::string>>(new std::pair<std::string, std::string>(transname, str)));
+				labelset.insert(std::shared_ptr<std::pair<std::string, std::string>>(new std::pair<std::string, std::string>(transname, str)));
 			}
 			else
 			{
@@ -68,7 +68,7 @@ void DFA::printDot(std::ostream& stream, bool verbose)
 			}
 		}
 
-		for (std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
+		for (std::set<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
 		{
 			output += "\"" + (*it_state)->name + "\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
@@ -86,7 +86,7 @@ void eNFA::checkIfValid()
 	unsigned int startingStatesCount = 0;
 	for (std::set<std::shared_ptr<NFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
-		for (std::vector<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
+		for (std::set<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
 			if (it_trans->first != eps)
 				assert(std::find(alphabet.begin(), alphabet.end(), it_trans->first) != alphabet.end()); //check if alphabet contains input if not an eps transition
@@ -108,20 +108,20 @@ void eNFA::printDot(std::ostream& stream, bool verbose)
 		if ((*it_state)->name == "" && !verbose) continue;
 		output += "\"" + (*it_state)->name + "\"" + ((*it_state)->accepting ? " [peripheries=2]" : "") + "\n";
 
-		std::vector<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
+		std::set<std::shared_ptr<std::pair<std::string, std::string>>> labelset;
 
-		for (std::vector<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
+		for (std::set<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
 			if (it_trans->second->name == "" && !verbose) continue;
 			std::string transname = it_trans->second->name;
 
-			std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
+			std::set<std::shared_ptr<std::pair<std::string, std::string>>>::iterator pair = std::find_if(labelset.begin(), labelset.end(), [&](const std::shared_ptr<std::pair<std::string, std::string>>& p) { return std::get<0>(*p) == transname; });
 
 			if (pair == labelset.end())
 			{
 				std::string str;
 				str.push_back(it_trans->first);
-				labelset.push_back(std::shared_ptr<std::pair<std::string, std::string>>(new std::pair<std::string, std::string>(transname, str)));
+				labelset.insert(std::shared_ptr<std::pair<std::string, std::string>>(new std::pair<std::string, std::string>(transname, str)));
 			}
 			else
 			{
@@ -131,7 +131,7 @@ void eNFA::printDot(std::ostream& stream, bool verbose)
 			}
 		}
 
-		for (std::vector<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
+		for (std::set<std::shared_ptr<std::pair<std::string, std::string>>>::iterator it_trans = labelset.begin(); it_trans != labelset.end(); it_trans++)
 		{
 			output += "\"" + (*it_state)->name +"\" -> \"" + (*it_trans)->first + "\" [label=\"" + (*it_trans)->second + "\"]\n";
 		}
@@ -144,7 +144,7 @@ void eNFA::printDot(std::ostream& stream, bool verbose)
 void eNFA::eclose(std::set<std::shared_ptr<NFAState>>& set, std::shared_ptr<NFAState> state)
 {
 	set.insert(state);
-	for (std::vector<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = state->transitions.begin(); it_trans != state->transitions.end(); it_trans++)
+	for (std::set<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = state->transitions.begin(); it_trans != state->transitions.end(); it_trans++)
 	{
 		if (it_trans->first == eps)
 		{
@@ -158,7 +158,7 @@ void eNFA::eclose(std::set<std::shared_ptr<NFAState>>& set, std::set<std::shared
 	for (std::set<std::shared_ptr<NFAState>>::iterator it_state = states.begin(); it_state != states.end(); it_state++)
 	{
 		set.insert(*it_state);
-		for (std::vector<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
+		for (std::set<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 		{
 			if (it_trans->first == eps)
 			{
@@ -216,14 +216,14 @@ DFA eNFA::convertToDFA()
 		std::string statesname = stateSetToString(*it_set);
 		std::shared_ptr<DFAState> correspondingdfa = *std::find_if(dfastates.begin(), dfastates.end(), [&](const std::shared_ptr<DFAState>& p) { return p->name == statesname; });
 
-		for (std::vector<char>::iterator it_alp = alphabet.begin(); it_alp != alphabet.end(); it_alp++)
+		for (std::set<char>::iterator it_alp = alphabet.begin(); it_alp != alphabet.end(); it_alp++)
 		{
 			std::set<std::shared_ptr<NFAState>> transitionset;
 
 			for (std::set<std::shared_ptr<NFAState>>::iterator it_state = it_set->begin(); it_state != it_set->end(); it_state++)
 			{
 				std::set<std::shared_ptr<NFAState>> state_transitionset;
-				for (std::vector<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
+				for (std::set<std::pair<char, std::shared_ptr<NFAState>>>::iterator it_trans = (*it_state)->transitions.begin(); it_trans != (*it_state)->transitions.end(); it_trans++)
 				{
 					if (it_trans->first == (*it_alp))
 					{
@@ -240,29 +240,29 @@ DFA eNFA::convertToDFA()
 
 			std::string transitionsetname = stateSetToString(transitionset);
 
-			correspondingdfa->transitions.push_back(std::pair<char, std::shared_ptr<DFAState>>(*it_alp, *std::find_if(dfastates.begin(), dfastates.end(), [&](const std::shared_ptr<DFAState>& p) { return p->name == transitionsetname; })));
-		}
-	}
-
-	std::set<std::shared_ptr<DFAState>> reachable_states;
-
-	//NEED TO START FROM START STATE!
-	for (std::set<std::shared_ptr<DFAState>>::iterator it_state = dfastates.begin(); it_state != dfastates.end(); it_state++)
-	{
-		if ((*it_state)->starting)
-			reachable_states.insert(*it_state);
-		for (std::vector<char>::iterator it_alp = alphabet.begin(); it_alp != alphabet.end(); it_alp++)
-		{
-			std::shared_ptr<DFAState> ptr = (**it_state)(*it_alp);
-			if (ptr->name != (*it_state)->name)
-				reachable_states.insert(ptr);
+			correspondingdfa->transitions.insert(std::pair<char, std::shared_ptr<DFAState>>(*it_alp, *std::find_if(dfastates.begin(), dfastates.end(), [&](const std::shared_ptr<DFAState>& p) { return p->name == transitionsetname; })));
 		}
 	}
 
 	DFA dfa;
 	dfa.alphabet = alphabet;
-	dfa.states = reachable_states;
-	dfa.startState = *std::find_if(reachable_states.begin(), reachable_states.end(), [&](const std::shared_ptr<DFAState>& p) { return p->starting; });
+	dfa.states.insert(*std::find_if(dfastates.begin(), dfastates.end(), [&](const std::shared_ptr<DFAState>& p) { return p->starting; }));
+	dfa.startState = *dfa.states.begin();
+	
+	size_t size;
+	do 
+	{
+		size = dfa.states.size();
+
+		for (std::set<std::shared_ptr<DFAState>>::iterator it_state = dfa.states.begin(); it_state != dfa.states.end(); it_state++)
+		{
+			for (std::set<char>::iterator it_chr = alphabet.begin(); it_chr != alphabet.end(); it_chr++)
+			{
+				dfa.states.insert((**it_state)(*it_chr));
+			}
+		}
+	} while (size != dfa.states.size());
+
 	dfa.checkIfValid();
 
 	return dfa;
